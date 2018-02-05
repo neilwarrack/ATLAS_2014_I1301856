@@ -1,3 +1,15 @@
+# gitignore
+
+# auto saves from emacs
+*~
+
+# Analysis specific stuff
+*.yoda
+*.hepmc
+
+# sub-directories
+**/
+
 # Prerequisites
 *.d
 
