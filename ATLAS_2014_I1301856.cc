@@ -1,12 +1,11 @@
 // -*- C++ -*-
 #include "Rivet/Analysis.hh"
-#include "Rivet/Projections/FinalState.hh"
-#include "Rivet/Projections/FastJets.hh"
+#include "Rivet/Projections/PartonicTops.hh"
 
 namespace Rivet {
 
 
-  /// @brief Add a short analysis description here
+  /// @brief Parton-level top-pair cross-sections at 7TeV and 8TeV
   class ATLAS_2014_I1301856 : public Analysis {
   public:
 
@@ -21,11 +20,12 @@ namespace Rivet {
     void init() {
 
       // Initialise and register projections
-      declare(FinalState(Cuts::abseta < 5 && Cuts::pT > 100*MeV), "FS");
+      declare(PartonicTops(PartonicTops::ELECTRON), "ElectronPartonTops") ;
+      declare(PartonicTops(PartonicTops::MUON), "MuonPartonTops") ;
 
       // Book histograms
-      _h_XXXX = bookProfile1D(1, 1, 1);
-      _h_YYYY = bookHisto1D(2, 1, 1);
+      //      _h_XXXX = bookProfile1D(1, 1, 1);
+      //      _h_YYYY = bookHisto1D(2, 1, 1);
       _h_ZZZZ = bookCounter(3, 1, 1);
 
     }
@@ -34,15 +34,26 @@ namespace Rivet {
     /// Perform the per-event analysis
     void analyze(const Event& event) {
 
-      /// @todo Do the event by event analysis here
+      const Particles electronpartontops = apply<ParticleFinder>(event, "ElectronPartonTops").particlesByPt() ;
+      const Particles muonpartontops = apply<ParticleFinder>(event, "MuonPartonTops").particlesByPt() ;
+      const bool EMuPair = ( electronpartontops.size() == 1 && muonpartontops.size() == 1 ) ;
 
+      if ( !EMuPair ) { 
+	std::cout<< "1" << std::endl ; // VETO DUE TO: not being a electron-muon pair dileptonic decay 
+	vetoEvent ;
+      }
+
+
+      _h_ZZZZ->fill(event.weight()) ;
+
+      std::cout << "9" << std::endl ; // SUCCESS!
     }
 
 
     /// Normalise histograms etc., after the run
     void finalize() {
 
-      normalize(_h_YYYY); // normalize to unity
+      //      normalize(_h_YYYY); // normalize to unity
       scale(_h_ZZZZ, crossSection()/picobarn/sumOfWeights()); // norm to cross section
 
     }
@@ -52,8 +63,8 @@ namespace Rivet {
 
     /// @name Histograms
     //@{
-    Profile1DPtr _h_XXXX;
-    Histo1DPtr _h_YYYY;
+    //    Profile1DPtr _h_XXXX;
+    //    Histo1DPtr _h_YYYY;
     CounterPtr _h_ZZZZ;
     //@}
 
