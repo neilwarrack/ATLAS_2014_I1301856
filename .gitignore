@@ -1,7 +1,8 @@
 # gitignore
 
-# auto saves from emacs
+# auto saves from emacs and the likes
 *~
+*#
 
 # Analysis specific stuff
 *.yoda
