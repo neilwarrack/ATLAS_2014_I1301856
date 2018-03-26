@@ -8,6 +8,15 @@
 *.yoda
 *.hepmc
 
+# Analysis tools in folder
+TTbarDiLep.cc
+ana.log
+codecounter.cc
+codecounter.sh
+compileHook.sh
+doRivet.sh
+runPythia.sh
+
 # sub-directories
 **/
 
