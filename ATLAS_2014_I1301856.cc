@@ -42,13 +42,12 @@ namespace Rivet {
 
 
       // veto if not an e mu pair
-      const bool eMuPair = ( electronpartontops.size() == 1 && muonpartontops.size() == 1 );
-      
+      const bool eMuPair = ( electronpartontops.size() == 1 && muonpartontops.size() == 1 );      
       if ( !eMuPair ) vetoEvent;
 
       // veto if e and mu are not of opposite chare
       const bool oppositeCharge ( electronpartontops[0].charge() + muonpartontops[0].charge() == 0 );
-	if ( !oppositeCharge ) vetoEvent;
+      if ( !oppositeCharge ) vetoEvent;
 
 
       // Fill histos
